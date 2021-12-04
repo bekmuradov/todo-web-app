@@ -1,28 +1,12 @@
-const express = require('express')
-const cors = require('cors')
-const helmet = require('helmet')
-const morgan = require('morgan')
-
-require('dotenv').config()
-
-const app = express()
-app.use(morgan('combined'))
-app.use(helmet())
-app.use(cors())
-app.use(express.json())
-
-app.get('/', (req, res) => {
-  res.json({
-    message: 'hello todo app'
+const app = require('./api')
+const db = require('./api/model')
+// load app only if db is alive and kicking
+db.sequelize.sync({ alter: true }).then(() => {
+  const port = process.env.PORT || 8081
+  app.use('/api/v1', require('./api/routes'))
+  app.listen(port, () => {
+    console.log(`Listening: http://localhost:${port}`)
   })
+}, (err) => {
+  console.log(`db is not ready, err:${err}`)
 })
-
-const api = require('./api')
-app.use('/api/v1', api)
-
-const port = process.env.PORT || 8081
-app.listen(port, () => {
-  console.log(`Listening: http://localhost:${port}`)
-})
-
-module.exports = app
