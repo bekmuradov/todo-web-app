@@ -20,5 +20,15 @@ module.exports = {
       message: data.message || 'Invalid Data, Validation Failed.',
       data: data.data || {}
     }
+  }),
+
+  failureResponse: (data = {}) => ({
+    headers: data.headers || { 'Content-Type': 'application/json' },
+    statusCode: data.statusCode || responseCode.internalServerError,
+    data: {
+      status: 'FAILURE',
+      message: data.message || 'Internal server error.',
+      data: data.data || {}
+    }
   })
 }

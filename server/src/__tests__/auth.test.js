@@ -32,12 +32,12 @@ describe('GET / -> test the root path', () => {
 describe('POST /register -> if email is given', () => {
   test('should register a user', async () => {
     const testUser = {
-      password: 'ymMQexqx0IdEiOT',
-      email: 'Katarina.Powlowski35@hotmail.com'
+      password: 'kjcndksoiOOpa',
+      email: 'David.Nalan@hotmail.com'
     }
 
     const response = await request(app)
-      .post('/register')
+      .post('/auth/register')
       .send(testUser)
     expect(response.headers['content-type']).toEqual('application/json; charset=utf-8')
     expect(response.statusCode).toBe(200)

@@ -1,15 +1,12 @@
-const Joi = require('joi')
-
-const validator = (schema) =>
-  (payload) => {
-    const { error } = Joi.validate(payload, schema, { abortEarly: false })
+function makeValidator (schema) {
+  return function validator (payload) {
+    const { error } = schema.validate(payload, { abortEarly: false })
     if (error) {
-      const message = error.details.map(el => el.message).join('\n')
-      return {
-        error: message
-      }
+      const message = error.details.map((el) => el.message).join('\n')
+      return { error: message }
     }
-    return true
+    return { error: false }
   }
+}
 
-module.exports = validator
+module.exports = makeValidator
