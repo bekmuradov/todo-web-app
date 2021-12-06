@@ -32,7 +32,7 @@ describe('GET / -> test the root path', () => {
 describe('POST /register -> if email is given', () => {
   test('should register a user', async () => {
     const testUser = {
-      password: 'kjcndksoiOOpa',
+      password: 'KjcndksoiO1pa',
       email: 'David.Nalan@hotmail.com'
     }
 
@@ -52,5 +52,75 @@ describe('POST /register -> if email is given', () => {
     const registeredUser = await User.findByPk(response.body.data.id)
     expect(registeredUser).not.toBeNull()
     expect(registeredUser.password).not.toBe(testUser.password)
+  })
+})
+
+describe('POST /login -> if email and password is correct', () => {
+  test('should return user with authentication token', async () => {
+    const testUser = {
+      password: 'KjcndksoiO1pa',
+      email: 'David.Nalan@hotmail.com'
+    }
+    const user = await request(app)
+      .post('/auth/login')
+      .send(testUser)
+    expect(user.headers['content-type']).toEqual('application/json; charset=utf-8')
+    expect(user.body.status).toBe('SUCCESS')
+    expect(user.body.data.user.email).toEqual(testUser.email)
+    expect(user.body.data).toMatchObject({
+      user: {
+        id: expect.any(Number),
+        isVerified: expect.any(Boolean)
+      },
+      token: expect.any(String)
+    })
+    expect(user.statusCode).toBe(200)
+  })
+})
+
+describe('POST /login -> if email is incorrect', () => {
+  test('should return unauthorized status and user not exists', async () => {
+    const user = await request(app)
+      .post('/auth/login')
+      .send(
+        {
+          password: 'KjcndksoiO1pa',
+          email: 'hotmail.com'
+        }
+      )
+
+    expect(user.headers['content-type']).toEqual('application/json; charset=utf-8')
+    expect(user.body.status).toBe('BAD_REQUEST')
+    expect(user.statusCode).toBeOneOf([401, 400])
+  })
+})
+
+describe('POST /login -> if password is incorrect', () => {
+  test('should return unauthorized status and incorrect password', async () => {
+    const user = await request(app)
+      .post('/auth/login')
+      .send(
+        {
+          email: 'David.Nalan@hotmail.com',
+          password: 'wrong@password'
+        }
+      )
+
+    expect(user.headers['content-type']).toEqual('application/json; charset=utf-8')
+    expect(user.body.status).toBe('BAD_REQUEST')
+    expect(user.statusCode).toBeOneOf([401, 400])
+  })
+})
+
+describe('POST /login -> if email or password is empty string or has not passed in body', () => {
+  test('should return bad request status and insufficient parameters', async () => {
+    const user = await request(app)
+      .post('/auth/login')
+      .send({})
+
+    expect(user.headers['content-type']).toEqual('application/json; charset=utf-8')
+    expect(user.body.status).toBe('BAD_REQUEST')
+    expect(user.body.message).toBe('Insufficient parameters.')
+    expect(user.statusCode).toBeOneOf([422, 400])
   })
 })

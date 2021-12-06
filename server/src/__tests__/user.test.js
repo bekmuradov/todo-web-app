@@ -1,7 +1,5 @@
 /* eslint no-undef: "off" */
-const userSchemaKeys = require('../api/validator/userSchema')
-const userValidator = require('../api/validator/index')(userSchemaKeys)
-const makeUser = require('../api/entities/user')({ userValidator })
+const { makeUser } = require('../api/entities/users/')
 
 require('dotenv').config()
 process.env.NODE_ENV = 'test'
@@ -20,11 +18,15 @@ afterAll(async function () {
 describe('[CASE 1] Test MakeUser', () => {
   test('should create a new user if valid payload', () => {
     const testUser = {
-      password: 'kjcndksoiOOpa',
+      password: 'Kjcndksoi01pa',
       email: 'David.Nalan@hotmail.com'
     }
     const user = makeUser(testUser)
-    expect(user).toEqual(testUser)
+    const newUser = {
+      password: user.getPassword(),
+      email: user.getEmail()
+    }
+    expect(newUser).toEqual(testUser)
   })
 })
 
@@ -32,15 +34,14 @@ describe('[CASE 2] Test MakeUser', () => {
   test('throws error if invalid password', async () => {
     try {
       const testUser = {
-        password: 'ymMQexq', // password less than 8 characters
+        password: 'ymMQexqip', // password less than 8 characters
         email: 'David.Nalan@hotmail.com'
       }
       await makeUser(testUser)
     } catch (error) {
-      const err = {
-        name: 'ValidationError',
-        message: 'Invalid data in User entity. password must be min 8 characters'
-      }
+      const err = new Error()
+      err.name = 'ValidationError'
+      err.message = 'Invalid data in User entity. password must contain lower case, upper case and atleast one digit'
       expect(error).toStrictEqual(err)
     }
   })

@@ -1,9 +1,9 @@
 const userModel = require('../../model').user
-const userSchemaKeys = require('../../validator/userSchema')
-const userValidator = require('../../validator/index')(userSchemaKeys)
-const makeUser = require('../../entities/user')({ userValidator })
-const userService = require('../../services/index')({ model: userModel, makeUser })
+// const userSchemaKeys = require('../../validator/userSchema')
+// const userValidator = require('../../validator/index')(userSchemaKeys)
+const { makeUser } = require('../../entities/users/')
+const userService = require('../../services/dbService')({ model: userModel, makeUser })
 const makeUniqueValidation = require('../../utils/uniqueValidation.js')(userService)
 const makeAuthController = require('./authController')
-const authController = makeAuthController({ makeUniqueValidation, userService, makeUser })
-module.exports = authController
+const AuthController = makeAuthController({ makeUniqueValidation, userService, makeUser })
+module.exports = AuthController

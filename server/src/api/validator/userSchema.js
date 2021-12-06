@@ -18,7 +18,7 @@ const userSchema = Joi.object({
     }),
   isVerified: Joi.boolean()
     .messages({
-      'any.type': 'verified must be a boolean'
+      'boolean.base': 'verified must be a boolean'
     })
 })
 

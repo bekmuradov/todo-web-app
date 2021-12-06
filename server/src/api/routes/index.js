@@ -1,14 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
-// const todoLists = require('./todoListsRoute')
+router
+  .use('/auth', require('./authRoutes'))
 
 router
-  .use('/auth', require('./authRoute'))
+  .use('/todolist', require('./todoListRoutes'))
 
-// router
-//   .get('/todolists', todolists.index)
-//   .get('/todolists/:id', todolists.show)
-//   .post('/todolists', todolists.create)
+router
+  .use('/todolistitem', require('./todoListItemRoutes'))
 
 module.exports = router

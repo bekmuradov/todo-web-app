@@ -1,6 +1,6 @@
-function buildMakeUser ({ userValidator }) {
-  return function makeUser (data) {
-    const { error } = userValidator(data)
+function buildMakeUser (userValidator) {
+  return function makeUser ({ email, password }) {
+    const { error } = userValidator({ email, password })
     if (error) {
       const ValidationError = new Error()
       ValidationError.name = 'ValidationError'
@@ -8,10 +8,10 @@ function buildMakeUser ({ userValidator }) {
       throw ValidationError
     }
 
-    return {
-      password: data.password,
-      email: data.email
-    }
+    return Object.freeze({
+      getPassword: () => password,
+      getEmail: () => email
+    })
   }
 }
 module.exports = buildMakeUser
