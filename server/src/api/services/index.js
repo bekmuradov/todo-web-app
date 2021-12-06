@@ -5,6 +5,7 @@ function makeSequelizeDbService ({ model }) {
   }
 
   const findOne = async (query, options = {}) => {
+    console.log(query)
     const result = await model.findOne({
       where: query,
       ...options

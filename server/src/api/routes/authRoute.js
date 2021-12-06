@@ -11,4 +11,12 @@ router.post('/register', (req, res, next) => {
   })
 })
 
+router.post('/login', (req, res, next) => {
+  req = adaptRequest(req)
+  console.log('login', req.body.email)
+  authController.login({ data: req.body }).then((result) => {
+    sendResponse(res, result)
+  })
+})
+
 module.exports = router

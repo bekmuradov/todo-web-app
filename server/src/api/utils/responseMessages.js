@@ -30,5 +30,25 @@ module.exports = {
       message: data.message || 'Internal server error.',
       data: data.data || {}
     }
+  }),
+
+  loginSuccess: (data = {}) => ({
+    headers: data.headers || { 'Content-Type': 'application/json' },
+    statusCode: data.statusCode || responseCode.success,
+    data: {
+      status: 'SUCCESS',
+      message: data.message || 'Login Successful',
+      data: data.data || {}
+    }
+  }),
+
+  loginFailed: (data = {}) => ({
+    headers: data.headers || { 'Content-Type': 'application/json' },
+    statusCode: data.statusCode || responseCode.badRequest,
+    data: {
+      status: 'BAD_REQUEST',
+      message: data.message || 'Login Failed.',
+      data: data.data || {}
+    }
   })
 }
