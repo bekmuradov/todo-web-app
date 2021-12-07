@@ -11,10 +11,10 @@ const userSchema = Joi.object({
       'string.pattern.base': 'password must contain lower case, upper case and atleast one digit'
     }),
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'th', 'ac', 'edu'] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'th', 'ac', 'edu', 'asia'] } })
     .required()
     .messages({
-      'string.email': 'accepted email tlds com, net, th, ac, edu'
+      'string.email': 'accepted email tlds .com, .net, .th, .ac, .edu, .asia'
     }),
   isVerified: Joi.boolean()
     .messages({

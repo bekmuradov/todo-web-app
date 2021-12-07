@@ -7,18 +7,18 @@ exports.todoListItemSchemaKeys = Joi.object({
       'string.empty': '"description" cannot be an empty field',
       'any.required': '"description" is a required field'
     }),
-  addedBy: Joi.number().integer()
+  addedBy: Joi.string()
     .required()
     .messages({
-      'number.base': '"addedBy" should be a type of \'number\'',
-      'number.empty': '"addedBy" cannot be an empty field',
+      'string.base': '"addedBy" should be a type of \'string\'',
+      'string.empty': '"addedBy" cannot be an empty field',
       'any.required': '"addedBy" is a required field'
     }),
-  todoListId: Joi.number().integer()
+  todoListId: Joi.string()
     .required()
     .messages({
-      'number.base': '"todoListId" should be a type of \'number\'',
-      'number.empty': '"todoListId" cannot be an empty field',
+      'string.base': '"todoListId" should be a type of \'string\'',
+      'string.empty': '"todoListId" cannot be an empty field',
       'any.required': '"todoListId" is a required field'
     }),
   isDone: Joi.boolean()
@@ -40,18 +40,18 @@ exports.updateTodoListItemSchemaKeys = Joi.object({
       'string.base': '"description" should be a type of \'text\'',
       'string.empty': '"description" cannot be an empty field'
     }),
-  addedBy: Joi.number().integer()
+  addedBy: Joi.string()
     .required()
     .messages({
-      'number.base': '"addedBy" should be a type of \'number\'',
-      'number.empty': '"addedBy" cannot be an empty field',
+      'string.base': '"addedBy" should be a type of \'string\'',
+      'string.empty': '"addedBy" cannot be an empty field',
       'any.required': '"addedBy" is a required field'
     }),
-  todoListId: Joi.number().integer()
+  todoListId: Joi.string()
     .required()
     .messages({
-      'number.base': '"todoListId" should be a type of \'number\'',
-      'number.empty': '"todoListId" cannot be an empty field',
+      'string.base': '"todoListId" should be a type of \'string\'',
+      'string.empty': '"todoListId" cannot be an empty field',
       'any.required': '"todoListId" is a required field'
     }),
   isDone: Joi.boolean()

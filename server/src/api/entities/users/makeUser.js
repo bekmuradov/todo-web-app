@@ -1,6 +1,6 @@
 function buildMakeUser (userValidator) {
-  return function makeUser ({ email, password }) {
-    const { error } = userValidator({ email, password })
+  return function makeUser ({ email, password, isVerified = false }) {
+    const { error } = userValidator({ email, password, isVerified })
     if (error) {
       const ValidationError = new Error()
       ValidationError.name = 'ValidationError'
@@ -10,7 +10,8 @@ function buildMakeUser (userValidator) {
 
     return Object.freeze({
       getPassword: () => password,
-      getEmail: () => email
+      getEmail: () => email,
+      getVerified: () => isVerified
     })
   }
 }

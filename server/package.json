@@ -7,7 +7,7 @@
     "start": "./node_modules/nodemon/bin/nodemon.js src/index.js --exec 'yarn run lint && node'",
     "lint": "./node_modules/.bin/eslint ./*.js",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
-    "test": "jest --runInBand --verbose --detectOpenHandles"
+    "test": "jest --runInBand --verbose"
   },
   "repository": "https://github.com/bekmuradov/todo-web-app.git",
   "author": "Beck",
