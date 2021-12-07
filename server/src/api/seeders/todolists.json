@@ -1,0 +1,14 @@
+[
+  {
+    "title": "First todo list",
+    "addedBy": "1"
+  },
+  {
+    "title": "Second todo list",
+    "addedBy": "2"
+  },
+  {
+    "title": "Third todo list",
+    "addedBy": "3"
+  }
+]
