@@ -1,9 +1,10 @@
 const responseMessage = require('../../utils/responseMessages')
 const { Op } = require('sequelize')
-const generateToken = require('../../services/authService')
+const { generateToken } = require('../../services/authService')
 const { JWT } = require('../../config/authConstants')
+const dayjs = require('dayjs')
 
-function makeAuthController ({ makeUniqueValidation, userService, makeUser, authService }) {
+function makeAuthController ({ makeUniqueValidation, userService, makeUser, tokenService, makeToken }) {
   const register = async ({ data }) => {
     try {
       const user = makeUser(data)
@@ -15,8 +16,12 @@ function makeAuthController ({ makeUniqueValidation, userService, makeUser, auth
       if (!isUserUnique) {
         return responseMessage.inValidParam({ message: 'User Registration Failed, Duplicate data found' })
       }
-      const result = await userService.createOne(NewUser)
-      return responseMessage.successResponse({ data: result })
+      // password automatically hashes before adding to db
+      // user model has a hook (check model/user.js)
+      const userToReturn = await userService.createOne(NewUser)
+      const userJSON = userToReturn.toJSON()
+      // TODO: Implement email verification (ex. send token to email)
+      return responseMessage.successResponse({ data: userJSON })
     } catch (error) {
       if (error.name === 'ValidationError') {
         return responseMessage.inValidParam({ message: error.message })
@@ -40,11 +45,17 @@ function makeAuthController ({ makeUniqueValidation, userService, makeUser, auth
         }
         const userJSON = user.toJSON()
         const token = await generateToken(userJSON, JWT.TOKEN_SECRET)
-        const result = {
-          user: userJSON,
-          token: token
+        const expire = dayjs().add(JWT.EXPIRES_IN, 'second').toISOString()
+        await tokenService.createOne({
+          userId: userJSON.id,
+          token: token,
+          tokenExpiredTime: expire
+        })
+        const userToReturn = {
+          ...userJSON,
+          ...{ token }
         }
-        return responseMessage.loginSuccess({ data: result })
+        return responseMessage.loginSuccess({ data: userToReturn })
       }
       return responseMessage.insufficientParameters()
     } catch (error) {
