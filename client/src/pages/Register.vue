@@ -1,22 +1,29 @@
 <template lang="html">
   <div class="q-pa-md">
-    <div class="q-gutter-md column">
-      <h1 class="text-h3">Register</h1>
+    <h1 class="text-h4">Register</h1>
+    <q-form
+      ref="registerForm"
+      @submit.prevent="handleSingup"
+      class="q-gutter-sm"
+    >
+
       <q-input
         v-model="email"
         filled
+        dense
         type="email"
-        hint="Email"
+        placeholder="Email"
         lazy-rules
         :rules="[val => !!val || 'Email is required']"
       />
       <q-input
         v-model="password"
         filled
+        dense
         :type="isPwd ? 'password' : 'text'"
-        hint="Password"
+        placeholder="Password"
         lazy-rules
-        :rules="[val => !!val || 'Password is required']"
+        :rules="[ val => val.length < 8 || 'Please use minimum 8 characters']"
       >
         <template v-slot:append>
           <q-icon
@@ -26,36 +33,72 @@
           />
         </template>
       </q-input>
-      <q-btn label="Register" type="submit" color="secondary" @click="register"  />
+
+      <div class="text-red" v-html="registrationError" />
+      <q-btn label="Register" :loading="loading" type="submit" color="secondary" />
       <q-btn label="Login" :to="{ name: 'Login' }" color="primary" flat />
-    </div>
+
+    </q-form>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
-import AuthService from '../services/AuthService'
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
 export default {
   setup () {
+    const $q = useQuasar()
+    const $store = useStore()
+    const $router = useRouter()
+
     const password = ref('')
     const email = ref('')
     const isPwd = ref(true)
+    const registrationError = ref(null)
+    const loading = ref(false)
 
-    const register = async () => {
+    const loggedIn = computed(() => $store.state.auth.status.loggedIn)
+
+    onMounted(() => {
+      if (loggedIn.value) {
+        $router.push({ name: 'Lists' })
+      }
+    })
+
+    function showNotif () {
+      $q.notify({
+        message: 'Register',
+        color: 'green'
+      })
+    }
+
+    const handleSingup = async (evt) => {
+      loading.value = true
       const credentials = {
         email: email.value,
         password: password.value
       }
-      const response = await AuthService.register(credentials)
-      console.log(response)
+      $store.dispatch('auth/register', credentials).then((data) => {
+        showNotif()
+        loading.value = false
+        $router.push({ name: 'Login' })
+      }, (error) => {
+        loading.value = false
+        registrationError.value = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      })
     }
+
     return {
       password,
       isPwd,
       email,
+      registrationError,
+      loading,
 
-      register
+      handleSingup
     }
   }
 }
