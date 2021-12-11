@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="q-pa-md">
+  <div class="q-pa-md fullscreen flex flex-center column">
     <h1 class="text-h4">Register</h1>
     <q-form
       ref="registerForm"
@@ -23,7 +23,7 @@
         :type="isPwd ? 'password' : 'text'"
         placeholder="Password"
         lazy-rules
-        :rules="[ val => val.length < 8 || 'Please use minimum 8 characters']"
+        :rules="[ val => val.length >= 8 || 'Please use minimum 8 characters']"
       >
         <template v-slot:append>
           <q-icon
@@ -70,8 +70,8 @@ export default {
 
     function showNotif () {
       $q.notify({
-        message: 'Register',
-        color: 'green'
+        message: 'Success',
+        color: 'positive'
       })
     }
 

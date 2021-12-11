@@ -1,5 +1,9 @@
+import { reactive } from 'vue'
+
 export default function () {
-  return {
-    todolists: []
-  }
+  return reactive({
+    todolists: [],
+    showAddTodolistDialog: false,
+    showEditTodolistDialog: false
+  })
 }

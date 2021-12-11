@@ -6,7 +6,7 @@
   "author": "Beck <47065940+bekmuradov@users.noreply.github.com>",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
+    "lint:fix": "eslint --fix --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {

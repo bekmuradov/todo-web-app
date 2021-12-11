@@ -28,3 +28,7 @@ export function logout ({ commit }) {
   AuthService.logout()
   commit('logout')
 }
+
+export function refreshToken ({ commit }, accessToken) {
+  commit('refreshToken', accessToken)
+}

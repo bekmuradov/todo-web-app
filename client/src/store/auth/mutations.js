@@ -20,3 +20,8 @@ export function logout (state) {
   state.status.loggedIn = false
   state.user = null
 }
+
+export function refreshToken (state, accessToken) {
+  state.status.loggedIn = true
+  state.user = { ...state.user, accessToken: accessToken }
+}

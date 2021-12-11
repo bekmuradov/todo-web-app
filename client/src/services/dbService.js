@@ -2,8 +2,13 @@ import { api } from 'boot/axios'
 import authHeader from './authHeader'
 
 export default {
-  getTodolists () {
-    return api.get('/todolist/list' + 'user', { headers: authHeader() })
+  getTodolists (id) {
+    return api.get('/todolist/list', {
+      headers: authHeader(),
+      params: {
+        id: id
+      }
+    })
   },
 
   getTodolist () {
@@ -11,6 +16,14 @@ export default {
   },
 
   addTodolist (data) {
-    return api.post('/todolist/:id' + 'user', { headers: authHeader() }, data)
+    console.log(authHeader())
+    const options = {
+      headers: authHeader()
+    }
+    api.post('/todolist/create', { data: data }, options).then(res => {
+      console.log(res)
+    }, (err) => {
+      console.error(err)
+    })
   }
 }
