@@ -7,18 +7,16 @@ exports.todoListItemSchemaKeys = Joi.object({
       'string.empty': '"description" cannot be an empty field',
       'any.required': '"description" is a required field'
     }),
-  addedBy: Joi.string()
+  addedBy: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"addedBy" should be a type of \'string\'',
-      'string.empty': '"addedBy" cannot be an empty field',
       'any.required': '"addedBy" is a required field'
     }),
-  todoListId: Joi.string()
+  todoListId: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"todoListId" should be a type of \'string\'',
-      'string.empty': '"todoListId" cannot be an empty field',
       'any.required': '"todoListId" is a required field'
     }),
   isDone: Joi.boolean()
@@ -28,11 +26,10 @@ exports.todoListItemSchemaKeys = Joi.object({
 }).unknown(true)
 
 exports.updateTodoListItemSchemaKeys = Joi.object({
-  id: Joi.string()
+  id: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"id" should be a type of \'string\'',
-      'string.empty': '"id" cannot be an empty field',
       'any.required': '"id" is a required field'
     }),
   description: Joi.string()
@@ -40,18 +37,16 @@ exports.updateTodoListItemSchemaKeys = Joi.object({
       'string.base': '"description" should be a type of \'text\'',
       'string.empty': '"description" cannot be an empty field'
     }),
-  addedBy: Joi.string()
+  addedBy: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"addedBy" should be a type of \'string\'',
-      'string.empty': '"addedBy" cannot be an empty field',
       'any.required': '"addedBy" is a required field'
     }),
-  todoListId: Joi.string()
+  todoListId: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"todoListId" should be a type of \'string\'',
-      'string.empty': '"todoListId" cannot be an empty field',
       'any.required': '"todoListId" is a required field'
     }),
   isDone: Joi.boolean()

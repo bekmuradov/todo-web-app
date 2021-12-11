@@ -9,13 +9,19 @@ function makeModel (sequelize) {
       autoIncrement: true,
       allowNull: false
     },
-    email: { type: DataTypes.STRING },
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     password: { type: DataTypes.STRING },
-    isVerified: {
+    is_verified: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    createdAt: { type: DataTypes.DATE }
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     hooks: {
       beforeCreate: [

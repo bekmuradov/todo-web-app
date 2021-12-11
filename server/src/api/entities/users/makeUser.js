@@ -4,7 +4,7 @@ function buildMakeUser (userValidator) {
     if (error) {
       const ValidationError = new Error()
       ValidationError.name = 'ValidationError'
-      ValidationError.message = `Invalid data in User entity. ${error}`
+      ValidationError.message = `${error}`
       throw ValidationError
     }
 

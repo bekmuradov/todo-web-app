@@ -6,7 +6,7 @@ function makeTodoListController ({ todoListService, makeTodoList, patchTodoList,
       const todoList = makeTodoList(data)
       const NewTodoList = {
         title: todoList.getTitle(),
-        addedBy: todoList.getUserId()
+        added_by: todoList.getUserId()
       }
       const createdTodoList = await todoListService.createOne(NewTodoList)
       return responseMessage.successResponse({ data: createdTodoList })
@@ -20,9 +20,12 @@ function makeTodoListController ({ todoListService, makeTodoList, patchTodoList,
 
   const selectAll = async ({ data }) => {
     try {
-      const result = await todoListModel.findAll({
-        limit: 10
-      })
+      const { id } = data
+      if (!id) {
+        return responseMessage.inValidParam({ message: 'No user id' })
+      }
+      const query = { added_by: id }
+      const result = await todoListService.findAllRecords(query)
       return responseMessage.successResponse({ data: result })
     } catch (error) {
       if (error.name === 'ValidationError') {
@@ -80,7 +83,7 @@ function makeTodoListController ({ todoListService, makeTodoList, patchTodoList,
       const NewTodoList = {
         id: todoList.getId(),
         title: todoList.getTitle(),
-        addedBy: todoList.getUserId()
+        added_by: todoList.getUserId()
       }
       const updatedTodoList = await todoListService.updateByPk(NewTodoList)
       return responseMessage.successResponse({ data: updatedTodoList })

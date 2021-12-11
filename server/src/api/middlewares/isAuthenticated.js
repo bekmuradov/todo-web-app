@@ -33,8 +33,7 @@ const auth = (req, res, next) => {
   })
     .then(() => next())
     .catch((error) => {
-      console.log(error)
-      sendResponse(res, responseMessages.unAuthorizedRequest(error))
+      sendResponse(res, responseMessages.unAuthorizedRequest({ message: error }))
     })
 }
 

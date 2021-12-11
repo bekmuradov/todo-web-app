@@ -34,16 +34,6 @@ function makeSequelizeDbService ({ model }) {
     return result
   }
 
-  // const updateByPk = async (data) => {
-  //   const options = {
-  //     where: {
-  //       id: data.id
-  //     }
-  //   }
-  //   const result = await model.update(data, options)
-  //   return result
-  // }
-
   const updateByPk = async (data) => {
     const pk = data.id
     let result = await model.update(data, {

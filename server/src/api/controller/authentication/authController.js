@@ -47,9 +47,10 @@ function makeAuthController ({ makeUniqueValidation, userService, makeUser, toke
         const token = await generateToken(userJSON, JWT.TOKEN_SECRET)
         const expire = dayjs().add(JWT.EXPIRES_IN, 'second').toISOString()
         await tokenService.createOne({
-          userId: userJSON.id,
+          user_id: userJSON.id,
           token: token,
-          tokenExpiredTime: expire
+          token_expired_time: expire,
+          created_at: dayjs()
         })
         const userToReturn = {
           ...userJSON,

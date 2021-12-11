@@ -8,21 +8,19 @@ exports.todoListSchemaKeys = Joi.object({
       'string.empty': '"title" cannot be an empty field',
       'any.required': '"title" is a required field'
     }),
-  addedBy: Joi.string()
+  addedBy: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"addedBy" should be a type of \'string\'',
-      'string.empty': '"addedBy" cannot be an empty field',
       'any.required': '"addedBy" is a required field'
     })
 }).unknown(true)
 
 exports.updateTodoListSchemaKeys = Joi.object({
-  id: Joi.string()
+  id: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"id" should be a type of \'string\'',
-      'string.empty': '"id" cannot be an empty field',
       'any.required': '"id" is a required field'
     }),
   title: Joi.string()
@@ -32,11 +30,10 @@ exports.updateTodoListSchemaKeys = Joi.object({
       'string.empty': '"title" cannot be an empty field',
       'any.required': '"title" is a required field'
     }),
-  addedBy: Joi.string()
+  addedBy: Joi.number()
+    .integer()
     .required()
     .messages({
-      'string.base': '"addedBy" should be a type of \'string\'',
-      'string.empty': '"addedBy" cannot be an empty field',
       'any.required': '"addedBy" is a required field'
     })
 }).unknown(true)

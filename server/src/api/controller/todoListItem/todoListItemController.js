@@ -6,9 +6,9 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
       const todoListItem = makeTodoListItem(data)
       const NewTodoListItem = {
         description: todoListItem.getDescription(),
-        addedBy: todoListItem.getUserId(),
-        todoListId: todoListItem.getTodoListId(),
-        isDone: todoListItem.getIsDone()
+        added_by: todoListItem.getUserId(),
+        todolist_id: todoListItem.getTodoListId(),
+        is_done: todoListItem.getIsDone()
       }
       const createdTodoList = await todoListItemService.createOne(NewTodoListItem)
       return responseMessage.successResponse({ data: createdTodoList })
@@ -23,8 +23,8 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
   const selectAll = async ({ data }) => {
     try {
       let query = {}
-      if (data.addedBy !== undefined) {
-        query = { addedBy: data.addedBy }
+      if (data.added_by !== undefined) {
+        query = { added_by: data.added_by }
       }
       const result = await todoListItemService.findAllRecords(query)
       return responseMessage.successResponse({ data: result })
@@ -79,9 +79,9 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
       const NewTodoListItem = {
         id: todoListItem.getId(),
         description: todoListItem.getDescription(),
-        addedBy: todoListItem.getUserId(),
-        todoListId: todoListItem.getTodoListId(),
-        isDone: todoListItem.getIsDone()
+        added_by: todoListItem.getUserId(),
+        todolist_id: todoListItem.getTodoListId(),
+        is_done: todoListItem.getIsDone()
       }
       const updatedTodoList = await todoListItemService.updateByPk(NewTodoListItem)
       return responseMessage.successResponse({ data: updatedTodoList })

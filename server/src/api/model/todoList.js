@@ -1,17 +1,23 @@
 const { DataTypes } = require('sequelize')
 
 function makeModel (sequelize) {
-  const TodoList = sequelize.define('TodoList', {
+  const TodoList = sequelize.define('todolist', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     title: { type: DataTypes.STRING },
-    createdAt: { type: DataTypes.DATE },
-    updatedAt: { type: DataTypes.DATE },
-    addedBy: { type: DataTypes.INTEGER },
-    updatedBy: { type: DataTypes.INTEGER }
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
+    },
+    added_by: { type: DataTypes.INTEGER },
+    updated_by: { type: DataTypes.INTEGER }
   })
 
   TodoList.prototype.toJSON = function () {

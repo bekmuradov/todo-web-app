@@ -16,7 +16,7 @@ router.post('/create', (req, res, next) => {
 
 router.get('/list', (req, res, next) => {
   req = adaptRequest(req)
-  TodoListController.selectAll({ data: req.body }).then((result) => {
+  TodoListController.selectAll({ data: req.queryParams }).then((result) => {
     sendResponse(res, result)
   })
     .catch((error) => {
