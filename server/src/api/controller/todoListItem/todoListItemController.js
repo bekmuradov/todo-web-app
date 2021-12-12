@@ -5,6 +5,7 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
     try {
       const todoListItem = makeTodoListItem(data)
       const NewTodoListItem = {
+        id: todoListItem.getId(),
         description: todoListItem.getDescription(),
         added_by: todoListItem.getUserId(),
         todolist_id: todoListItem.getTodoListId(),
@@ -20,11 +21,33 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
     }
   }
 
+  const insertBulk = async ({ data }) => {
+    try {
+      const TodoListItemEntities = data.map((item) => {
+        const newItem = makeTodoListItem(item)
+        return {
+          id: newItem.getId(),
+          description: newItem.getDescription(),
+          added_by: newItem.getUserId(),
+          todolist_id: newItem.getTodoListId(),
+          is_done: newItem.getIsDone()
+        }
+      })
+      const results = await todoListItemService.createMany(TodoListItemEntities)
+      return responseMessage.successResponse({ data: results })
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        return responseMessage.inValidParam({ message: error.message })
+      }
+      return responseMessage.failureResponse()
+    }
+  }
+
   const selectAll = async ({ data }) => {
     try {
       let query = {}
-      if (data.added_by !== undefined) {
-        query = { added_by: data.added_by }
+      if (data.addedBy !== undefined && data.todoListId) {
+        query = { added_by: data.addedBy, todolist_id: data.todoListId }
       }
       const result = await todoListItemService.findAllRecords(query)
       return responseMessage.successResponse({ data: result })
@@ -95,6 +118,7 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
 
   return Object.freeze({
     insert,
+    insertBulk,
     selectAll,
     selectOne,
     deleteOne,

@@ -4,6 +4,14 @@ function makeSequelizeDbService ({ model }) {
     return result
   }
 
+  const createMany = async (data) => {
+    if (data && data.length > 0) {
+      const result = await model.bulkCreate(data)
+      return result
+    }
+    throw new Error('send List of objects (key/value pairs) to create instances from')
+  }
+
   const findOne = async (query) => {
     const result = await model.findOne({
       where: query
@@ -48,6 +56,7 @@ function makeSequelizeDbService ({ model }) {
 
   return Object.freeze({
     createOne,
+    createMany,
     findOne,
     findByPk,
     findAllRecords,

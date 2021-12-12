@@ -5,7 +5,7 @@ const ErrorHandler = require('./api/utils/errorHandler')
 
 // load app only if db is alive and kicking
 // to drop existing tables and re-sync database use db.sequelize.sync({ force: true })
-db.sequelize.sync({ force: true }).then(async () => {
+db.sequelize.sync({ alter: true }).then(async () => {
   const port = process.env.PORT || 8081
   app.use('/api/v1', require('./api/routes'))
   if (process.env.NODE_ENV === 'test') {

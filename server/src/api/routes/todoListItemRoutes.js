@@ -14,6 +14,17 @@ router.post('/create', (req, res, next) => {
     })
 })
 
+router.post('/create-bulk', (req, res, next) => {
+  req = adaptRequest(req)
+  console.log('logged in user', req.user)
+  TodoListItemController.insertBulk({ data: req.body.data }).then((result) => {
+    sendResponse(res, result)
+  })
+    .catch((error) => {
+      sendResponse(res, error)
+    })
+})
+
 router.get('/list', (req, res, next) => {
   req = adaptRequest(req)
   TodoListItemController.selectAll({ data: req.body }).then((result) => {

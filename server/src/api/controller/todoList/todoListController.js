@@ -5,6 +5,7 @@ function makeTodoListController ({ todoListService, makeTodoList, patchTodoList,
     try {
       const todoList = makeTodoList(data)
       const NewTodoList = {
+        id: todoList.getId(),
         title: todoList.getTitle(),
         added_by: todoList.getUserId()
       }
