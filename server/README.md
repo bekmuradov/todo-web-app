@@ -12,7 +12,7 @@ I tried to follow this Clean Architecture rules:
 5. **Independent of any external agency**. Business rules don't know anything about outside world.
 
 
-## Note: Please make the .env file before using. Follow the .env.txt file.
+## Note: Please make the .env file before using. Follow the env.example file.
 1. Generate sekret key ```node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"``` and put in .env TOKEN_SECRET
 2. Create the Postgresql database ```createdb 'database-name'``` and put in .env DB_NAME
 3. Use Postgresql connection string / URL and put it in DEV_DB_URL (otherwise change the src/api/config/dbConfig.js file)

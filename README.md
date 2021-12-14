@@ -12,9 +12,9 @@ I tried to follow this Clean Architecture rules:
 5. **Independent of any external agency**. Business rules don't know anything about outside world.
 
 
-For more go to
-server/README.md
-client/README.md
+**For more go to:**
+- server/README.md
+- client/README.md
 
 Resources:
 1. [Clean Architecture in Node.js](https://mannhowie.com/clean-architecture-node)
