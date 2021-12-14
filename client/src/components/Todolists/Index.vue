@@ -1,17 +1,8 @@
 <template lang="html">
   <div class="restrain-400">
     <div class="q-pa-md">
-      <div class="row justify-center items-center q-px-md border-rounded">
-        <search-todolists class="col-11" />
-        <div class="col-1">
-          <add-todolist-button @click="store.commit('todolist/showAddTodolistDialog', true)" />
-        </div>
-      </div>
-    </div>
-
-    <div class="q-pa-md">
       <list-todolists
-        v-if="store.state.todolist.todolists.length"
+        v-if="store.state.todolists.lists.length"
       />
 
       <nothing-here
@@ -22,25 +13,37 @@
     </div>
   </div>
 
+  <q-page-sticky position="bottom" :offset="[0, 18]">
+    <q-btn
+      color="accent"
+      icon="add"
+      rounded
+      padding="sm"
+      unelevated
+      @click="store.commit('todolists/showAddTodolistDialog', true)"
+    />
+  </q-page-sticky>
+
   <dialog-add-todolist />
-  <!-- list all todolists -->
-  <!-- add todo list button -->
 </template>
 
 <script>
-import { inject } from 'vue'
+import { inject, onMounted } from 'vue'
 export default {
   setup () {
     const store = inject('store')
+
+    const getUserTodolists = () => store.dispatch('todolists/fetchTodolists')
+
+    onMounted(getUserTodolists)
+
     return {
       store
     }
   },
   components: {
-    'list-todolists': require('./ListTodolists').default,
-    'search-todolists': require('./SearchTodolists').default,
-    'add-todolist-button': require('./AddTodolistButton').default,
-    'dialog-add-todolist': require('./DialogAddTodolist').default
+    'list-todolists': require('components/Todolists/ListTodolists').default,
+    'dialog-add-todolist': require('components/Todolists/DialogAddTodolist').default
   }
 }
 </script>

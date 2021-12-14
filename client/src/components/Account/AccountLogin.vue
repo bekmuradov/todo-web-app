@@ -74,10 +74,6 @@ export default {
       }
     })
 
-    // function reset () {
-    //   loginForm.value.resetValidation()
-    // }
-
     function showNotif () {
       $q.notify({
         message: 'Success',

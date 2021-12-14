@@ -3,9 +3,10 @@
     borderless
     dense
     :type="type"
-    bg-color="backdrop"
+    bg-color="white"
     :placeholder="placeholder"
     lazy-rules
+    class="new-todo"
   />
 </template>
 
@@ -22,3 +23,9 @@ export default {
   }
 }
 </script>
+
+<style media="screen">
+  .q-field__native {
+    padding-left: 15px;
+  }
+</style>

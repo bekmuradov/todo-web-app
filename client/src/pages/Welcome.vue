@@ -15,7 +15,7 @@
     </div>
     <div class="col">
       <q-img
-        src="../assets/hero-img.png"
+        src="../statics/hero-img.png"
       />
     </div>
   </div>

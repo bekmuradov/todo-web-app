@@ -1,8 +1,9 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-
-import auth from './auth'
-import todolist from './todolist'
+import dbService from '../services/dbService'
+import auth from './Auth'
+import todolists from './Todolists'
+import todoitems from './Todoitems'
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -16,7 +17,25 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
       auth: auth,
-      todolist: todolist
+      todolists: todolists,
+      todoitems: todoitems
+    },
+    state: {
+      publicTask: null
+    },
+    mutations: {
+      setPublicTask (state, payload) {
+        state.publicTask = payload
+      }
+    },
+    actions: {
+      fetchPublicTask ({ commit }, token) {
+        return dbService.getSharedTask(token).then(
+          (response) => {
+            commit('setPublicTask', response.data.data)
+            return Promise.resolve(response.data.data)
+          })
+      }
     },
 
     // enable strict mode (adds overhead!)

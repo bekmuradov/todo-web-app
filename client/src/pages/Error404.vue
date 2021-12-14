@@ -2,11 +2,12 @@
   <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
     <div>
       <div style="font-size: 30vh">
-        404
+        404. Not found
       </div>
 
       <div class="text-h2" style="opacity:.4">
         Oops. Nothing here...
+        The requested resource is not available.
       </div>
 
       <q-btn

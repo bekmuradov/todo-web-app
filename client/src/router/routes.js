@@ -5,6 +5,9 @@ const Register = () => import('components/Account/AccountRegister.vue')
 const Login = () => import('components/Account/AccountLogin.vue')
 const Account = () => import('components/Account/AccountLogout.vue')
 const TodoList = () => import('components/Todolists/Index.vue')
+const SharedTodoitems = () => import('components/Todoitems/SharedTodoitems.vue')
+const ViewTodolist = () => import('components/Todolists/ViewTodolist.vue')
+const ViewSharedTask = () => import('pages/ViewSharedTask.vue')
 
 const routes = [
   {
@@ -23,6 +26,11 @@ const routes = [
     component: Login
   },
   {
+    path: '/public/todoitem',
+    name: 'ViewSharedTask',
+    component: ViewSharedTask
+  },
+  {
     path: '/me',
     component: MainLayout,
     meta: { requiresAuth: true },
@@ -33,9 +41,19 @@ const routes = [
         component: TodoList
       },
       {
+        path: 'shared-todos',
+        name: 'SharedTodoitems',
+        component: SharedTodoitems
+      },
+      {
         path: 'account',
         name: 'Account',
         component: Account
+      },
+      {
+        path: '/list/:todolistId',
+        name: 'ViewTodolist',
+        component: ViewTodolist
       }
     ]
   },

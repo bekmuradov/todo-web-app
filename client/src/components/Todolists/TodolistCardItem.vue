@@ -2,17 +2,12 @@
   <q-card
     flat
     bordered
-    v-touch-pan.mouse.prevent="moveItem"
     class="border-rounded overflow-hidden bg-grey-1 todolist-card"
-    :style="`transform: translateX(${itemOffser}px); transition: transform ${transitionDuration}s`"
-    @mouseup="handleTouchEnd"
-    @touchend="handleTouchEnd"
-    @click="showList(list.id) && store.commit('todolist/showEditTodolistDialog', true)"
   >
     <q-card-section horizontal>
       <q-card-section class="q-pa-none col-10">
         <q-item
-          @click="storeShowTodolistItems"
+          @click="navigateToListPage(list.id)"
           class="text-size-16 text-primary"
           clickable
           v-ripple
@@ -23,7 +18,7 @@
           </q-item-section>
 
           <q-item-section side>
-            {{ list.todoitems.length }}
+            {{ list.todolist_items.length }}
           </q-item-section>
 
           <q-item-section avatar>
@@ -35,58 +30,73 @@
       <q-separator vertical />
 
       <q-card-section class="q-pa-none col">
-        <q-btn
-          class="no-border-radius fit"
-          round
-          color="primary"
+        <q-icon
+          class="no-border-radius fit cursor-pointer"
+          size="sm"
+          color="grey-6"
           flat
+          name="more_vert"
         >
-        <q-icon name="more_vert" size="32px" />
-      </q-btn>
+          <q-menu cover auto-close>
+            <q-list>
+              <q-item clickable>
+                <q-item-section @click="navigateToListPage(list.id)">Edit list</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section @click="handleDelete(list)">Delete list</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+      </q-icon>
     </q-card-section>
   </q-card-section>
   </q-card>
-  <dialog-edit-todolist />
 </template>
 
 <script>
-import { inject, computed } from 'vue'
+import { inject, computed, defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
-export default {
+export default defineComponent({
   props: {
     list: Object
   },
   setup () {
+    const $q = useQuasar()
     const store = inject('store')
-    // const router = inject('router')
+    const router = useRouter()
 
-    const todolists = computed(() => store.state.todolist.todolists)
+    const todolists = computed(() => store.state.todolists.lists)
 
-    function handleEdit () {
-      // const id = props.id
+    function handleDelete (list) {
+      $q.dialog({
+        title: 'Confirm',
+        message: 'Realy delete?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        store.dispatch('todolists/deleteTodolist', list.id).then((data) => {
+          $q.notify('Todo list deleted')
+        }, (error) => {
+          $q.notify(error.message)
+        })
+      })
     }
 
-    function handleDelete () {
-      // const id = props.id
-    }
-
-    function showList (id) {
-      const list = todolists.value.find(list => list.id === id)
-      console.log(list)
+    function navigateToListPage (id) {
+      store.dispatch('todolists/getTodolistById', id)
+      router.push({ name: 'ViewTodolist', params: { todolistId: id } })
     }
 
     return {
       store,
       todolists,
-      handleEdit,
       handleDelete,
-      showList
+      navigateToListPage
     }
-  },
-  components: {
-    'dialog-edit-todolist': require('components/Todolists/DialogEditTodolist').default
   }
-}
+})
 </script>
 
 <style media="screen">

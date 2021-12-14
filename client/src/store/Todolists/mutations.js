@@ -1,5 +1,9 @@
 export function setTodolists (state, payload) {
-  state.todolists.push(payload)
+  state.lists = payload
+}
+
+export function setTodolist (state, payload) {
+  state.listToView = payload
 }
 
 export function showAddTodolistDialog (state, payload) {
@@ -8,4 +12,8 @@ export function showAddTodolistDialog (state, payload) {
 
 export function showEditTodolistDialog (state, payload) {
   state.showEditTodolistDialog = payload
+}
+
+export function setEditList (state, payload) {
+  state.editListForDialog = payload
 }

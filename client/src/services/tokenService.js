@@ -8,7 +8,7 @@ export default {
 
   getLocalAccessToken () {
     const user = JSON.parse(LocalStorage.getItem('todo-app-user'))
-    return user?.accessToken
+    return user?.token
   },
 
   updateLocalAccessToken (token) {

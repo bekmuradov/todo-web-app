@@ -8,7 +8,7 @@
       <div class="text-center q-gutter-sm">
         Loggen in as:
         <div class="text-body1 text-primary">
-          {{ userEmail }}
+          {{ user?.email }}
         </div>
       </div>
 
@@ -33,7 +33,7 @@ export default {
     const $store = useStore()
     const $router = useRouter()
 
-    const userEmail = computed(() => $store.state.auth.user.email)
+    const user = computed(() => $store.state.auth.user)
     const loggedIn = computed(() => $store.state.auth.status.loggedIn)
 
     function handleLogout () {
@@ -42,7 +42,7 @@ export default {
     }
 
     return {
-      userEmail,
+      user,
       loggedIn,
       handleLogout
     }
