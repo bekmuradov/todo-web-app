@@ -4,7 +4,7 @@ This is an example of a simple CRUD application with layered software and separa
 
 It is a simple web app for creating `todolists` and `todolistitems` and includes authentication, validation, persistence and UI.
 
-###Features:
+### Features:
 - [x] Users could to create an account
 - [x] Users must be authenticated before using the application
 - [x] Each user can have multiple to-do list
