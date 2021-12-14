@@ -45,15 +45,15 @@ To install dependecies:
 The application is separated into three layers. Inner layers cannot depend on outer layers and outer layers should only depend one layer in:
 
 - **Inner Layer**
-- **Entities**. Handles the creation, validation and reading of our entities (users, todolists, todoitems and userTokens).
-- **dbConfig**. Any choice of DB (in memory, Postgresql, MongoDB, SQL), this is independent of the model.
+   - **Entities**. Handles the creation, validation and reading of our entities (users, todolists, todoitems and userTokens).
+   - **dbConfig**. Any choice of DB (in memory, Postgresql, MongoDB, SQL), this is independent of the model.
 - **Middle Layer**
-- **Controllers & Services**. Handles transfer between the DB (like an ORM). Depends on the model to validate and create the entity in DB. The key is to have a consistent & custom API that all outer layers communicate with. Testing here will ensure that replacing or using multiple DBs doesn't break anything further upstream.
+   - **Controllers & Services**. Handles transfer between the DB (like an ORM). Depends on the model to validate and create the entity in DB. The key is to have a consistent & custom API that all outer layers communicate with. Testing here will ensure that replacing or using multiple DBs doesn't break anything further upstream.
 - **Outer Layer**
-- **Routes**. Represents the UI or interface (Web or CLI). It communicates only with the Middle layer.
+   - **Routes**. Represents the UI or interface (Web or CLI). It communicates only with the Middle layer.
 
-### Example application structure
-```bash
+### Application structure
+```
 ============= INNER LAYER =====================================================================
 entities/                  // create new entity or update by validating payload and returning new read (getters) only object
 
@@ -68,7 +68,7 @@ entities/                  // create new entity or update by validating payload 
   L users
     L index.js             // dependency inject schema/ validation library
     L makeUser.js          // makeUser()
-  L userTOkens
+  L userTokens
     L index.js             // dependency inject schema/ validation library
     L makeUserToken.js     // makeUserToken()
 
@@ -93,11 +93,13 @@ services/                   // think of it as our internal ORM (logic for our us
 controllers/                // per each entity above
 
 ============= OUTER LAYER =====================================================================
-routes/                     // routes paths
-     L autRoutes.js         // register, login, signout
-     L publicRoute.js       // creates a magic link with 24 hour expiration time and validates the request to access the todoitem via magic link
+routes/                      // routes paths
+     L autRoutes.js          // register, login, signout
+     L publicRoute.js        // creates a magic link with 24 hour expiration time and validates the request to access the todoitem via magic link
      L todoListItemRoutes.js // routes with GET, PUT, POST, DELETE methods based on request
      L todoListRoutes.js     // routes with GET, PUT, POST, DELETE methods based on request
+     
+index.js                     // express js server
 
 middlewares/
     L authenticateJWT.js     // to validate the magic link
@@ -105,27 +107,27 @@ middlewares/
 
 ============= HELPER FUNCTIONS =====================================================================
 helpers/
-    L adaptRequest.js        // return new read only request object, it cannot be changed
-    L sendResponse.js        // helper func to return the response
+    L adaptRequest.js         // return new read only request object, it cannot be changed
+    L sendResponse.js         // helper func to return the response
 utils/
     L errorHandler.js         // global error error handler
     L responseCodes.js
     L responseMessages.js     // custom response messages to handle different situations
     L uniqueValidation.js     // check is user is unique, using it in the authController before registration
 
-__tests__/                     // jest tests to test run yarn test from the command line
-    L auth.test.js             // should register a user, login, should throw error when login with wrong credentials
-    L todolist.test.js         // test makeTodoList(), patchTodoList(), tests the response if invalid data
-    L todolistitem.test.js     // test makeTodoListItem(), patchTodoListItem(), tests the response if invalid data
-    L user.test.js             // test makeTodoUser(), tests the response if invalid data
+__tests__/                    // jest tests to test run yarn test from the command line
+    L auth.test.js            // should register a user, login, should throw error when login with wrong credentials
+    L todolist.test.js        // test makeTodoList(), patchTodoList(), tests the response if invalid data
+    L todolistitem.test.js    // test makeTodoListItem(), patchTodoListItem(), tests the response if invalid data
+    L user.test.js            // test makeTodoUser(), tests the response if invalid data
 ```
 
-**Futher improvements needs to be implemented:**
+**Futher improvements needed to be implemented:**
 1. Implement reset password route
 2. Implement email verification, like sending a link to an email, then user redirectes with that link
 3. implement access and refresh token authentication strategy
 4. Implement short url for magic links
-5. Implement role access logic
+5. Implement role based access logic
 
 
 Resources:
