@@ -6,6 +6,9 @@ router
   .use('/auth', require('./authRoutes'))
 
 router
+  .use('/public', require('./publicRoute'))
+
+router
   .use('/todolist', auth, require('./todoListRoutes'))
 
 router

@@ -5,14 +5,13 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
     try {
       const todoListItem = makeTodoListItem(data)
       const NewTodoListItem = {
-        id: todoListItem.getId(),
         description: todoListItem.getDescription(),
         added_by: todoListItem.getUserId(),
         todolist_id: todoListItem.getTodoListId(),
         is_done: todoListItem.getIsDone()
       }
-      const createdTodoList = await todoListItemService.createOne(NewTodoListItem)
-      return responseMessage.successResponse({ data: createdTodoList })
+      const createdTodoListItem = await todoListItemService.createOne(NewTodoListItem)
+      return responseMessage.successResponse({ data: createdTodoListItem })
     } catch (error) {
       if (error.name === 'ValidationError') {
         return responseMessage.inValidParam({ message: error.message })
@@ -23,18 +22,19 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
 
   const insertBulk = async ({ data }) => {
     try {
+      console.log('>>>>>>>>', data)
       const TodoListItemEntities = data.map((item) => {
         const newItem = makeTodoListItem(item)
         return {
-          id: newItem.getId(),
           description: newItem.getDescription(),
           added_by: newItem.getUserId(),
           todolist_id: newItem.getTodoListId(),
           is_done: newItem.getIsDone()
         }
       })
-      const results = await todoListItemService.createMany(TodoListItemEntities)
-      return responseMessage.successResponse({ data: results })
+      console.log('>>>>>>', TodoListItemEntities)
+      const result = await todoListItemService.createMany(TodoListItemEntities)
+      return responseMessage.successResponse({ data: result })
     } catch (error) {
       if (error.name === 'ValidationError') {
         return responseMessage.inValidParam({ message: error.message })
@@ -47,7 +47,7 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
     try {
       let query = {}
       if (data.addedBy !== undefined && data.todoListId) {
-        query = { added_by: data.addedBy, todolist_id: data.todoListId }
+        query = { addedBy: data.addedBy, todolistId: data.todoListId }
       }
       const result = await todoListItemService.findAllRecords(query)
       return responseMessage.successResponse({ data: result })
@@ -83,8 +83,8 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
       if (!id) {
         return responseMessage.badRequest()
       }
-      const deletedTodoList = await todoListItemService.deleteByPk(id)
-      return responseMessage.successResponse({ data: deletedTodoList })
+      const deletedTodoListItem = await todoListItemService.deleteByPk(id)
+      return responseMessage.successResponse({ data: deletedTodoListItem })
     } catch (error) {
       if (error.name === 'ValidationError') {
         return responseMessage.inValidParam({ message: error.message })
@@ -93,11 +93,13 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
     }
   }
 
-  const updateOne = async ({ data }) => {
+  const updateOne = async (id, data, loggedInUser) => {
     try {
-      if (!data.id) {
+      if (!id) {
         return responseMessage.badRequest()
       }
+      delete data.updatedBy
+      data.updatedBy = loggedInUser.id
       const todoListItem = patchTodoListItem(data)
       const NewTodoListItem = {
         id: todoListItem.getId(),
@@ -106,8 +108,11 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
         todolist_id: todoListItem.getTodoListId(),
         is_done: todoListItem.getIsDone()
       }
-      const updatedTodoList = await todoListItemService.updateByPk(NewTodoListItem)
-      return responseMessage.successResponse({ data: updatedTodoList })
+      const filterData = removeEmpty(NewTodoListItem)
+      const query = { id: id }
+      const updatedTodoListItem = await todoListItemService.updateMany(query, filterData)
+      // const updatedTodoList = await todoListItemService.updateByPk(NewTodoListItem)
+      return responseMessage.successResponse({ data: updatedTodoListItem })
     } catch (error) {
       if (error.name === 'ValidationError') {
         return responseMessage.inValidParam({ message: error.message })
@@ -116,13 +121,43 @@ function makeTodoListItemController ({ todoListItemService, makeTodoListItem, pa
     }
   }
 
+  const updateMany = async (data, loggedInUser) => {
+    try {
+      if (data.data) {
+        delete data.data.addedBy
+        delete data.data.updatedBy
+        data.data.updatedBy = loggedInUser.id
+        const TodoListItem = makeTodoListItem(data.data)
+        const filterData = removeEmpty(TodoListItem)
+        const updatedTodoListItems = await todoListItemService.updateMany(data.filter, filterData)
+        return responseMessage.successResponse({ data: updatedTodoListItems })
+      }
+      return responseMessage.badRequest()
+    } catch (error) {
+      if (error.name === 'ValidationError') {
+        return responseMessage.inValidParam({ message: error.message })
+      }
+      return responseMessage.failureResponse()
+    }
+  }
+
+  const removeEmpty = (obj) => {
+    Object.entries(obj).forEach(([key, value]) => {
+      if (value === undefined) {
+        delete obj[key]
+      }
+    })
+    return obj
+  }
+
   return Object.freeze({
     insert,
     insertBulk,
     selectAll,
     selectOne,
     deleteOne,
-    updateOne
+    updateOne,
+    updateMany
   })
 }
 

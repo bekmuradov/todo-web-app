@@ -96,18 +96,18 @@ describe('[CASE 3] Test MakeTodoListItem', () => {
       expect(error).toStrictEqual(err)
     }
   })
-  test('throws error if addedBy field is not a string', async () => {
+  test('throws error if addedBy field is not a number', async () => {
     try {
       const payload = {
         description: 'First todo list item',
         todoListId: '1',
-        addedBy: 1
+        addedBy: '1'
       }
       await makeTodoListItem(payload)
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "addedBy" should be a type of \'string\''
+      err.message = 'Invalid data in TodoListItem entity. "addedBy" is a required field'
       expect(error).toStrictEqual(err)
     }
   })
@@ -169,27 +169,10 @@ describe('[CASE 2] Test PatchTodoListItem', () => {
       expect(error).toStrictEqual(err)
     }
   })
-  test('throws error if id field is empty', async () => {
+  test('throws error if id field is not a number', async () => {
     try {
       const payload = {
-        id: '',
-        description: 'Update todo list item',
-        todoListId: '1',
-        addedBy: '1',
-        isDone: true
-      }
-      await patchTodoListItem(payload)
-    } catch (error) {
-      const err = new Error()
-      err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "id" cannot be an empty field'
-      expect(error).toStrictEqual(err)
-    }
-  })
-  test('throws error if id field is not a string', async () => {
-    try {
-      const payload = {
-        id: 1,
+        id: '1',
         description: 'Update todo list item',
         todoListId: '1',
         addedBy: '1',
@@ -199,7 +182,7 @@ describe('[CASE 2] Test PatchTodoListItem', () => {
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "id" should be a type of \'text\''
+      err.message = 'Invalid data in TodoListItem entity. \'"addedBy" is a required field\''
       expect(error).toStrictEqual(err)
     }
   })
@@ -222,37 +205,20 @@ describe('[CASE 3] Test PatchTodoListItem', () => {
       expect(error).toStrictEqual(err)
     }
   })
-  test('throws error if addedBy field is not a string', async () => {
+  test('throws error if addedBy field is not a number', async () => {
     try {
       const payload = {
         id: '1',
         description: 'Update todo list item',
         todoListId: '1',
-        addedBy: 1,
+        addedBy: '1',
         isDone: true
       }
       await makeTodoListItem(payload)
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "addedBy" should be a type of \'string\''
-      expect(error).toStrictEqual(err)
-    }
-  })
-  test('throws error if addedBy field is empty', async () => {
-    try {
-      const payload = {
-        id: '1',
-        description: 'Update todo list item',
-        todoListId: '1',
-        addedBy: '',
-        isDone: true
-      }
-      await patchTodoListItem(payload)
-    } catch (error) {
-      const err = new Error()
-      err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "addedBy" cannot be an empty field'
+      err.message = 'Invalid data in TodoListItem entity. "addedBy" is a required field'
       expect(error).toStrictEqual(err)
     }
   })
@@ -275,12 +241,12 @@ describe('[CASE 3] Test PatchTodoListItem', () => {
       expect(error).toStrictEqual(err)
     }
   })
-  test('throws error if todoListId field is not a string', async () => {
+  test('throws error if todoListId field is not a number', async () => {
     try {
       const payload = {
         id: '1',
         description: 'Update todo list item',
-        todoListId: 1,
+        todoListId: '1',
         addedBy: '1',
         isDone: true
       }
@@ -288,7 +254,7 @@ describe('[CASE 3] Test PatchTodoListItem', () => {
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "todoListId" should be a type of \'string\''
+      err.message = 'Invalid data in TodoListItem entity. "todoListId" must be a number'
       expect(error).toStrictEqual(err)
     }
   })
@@ -305,7 +271,7 @@ describe('[CASE 3] Test PatchTodoListItem', () => {
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in TodoListItem entity. "todoListId" cannot be an empty field'
+      err.message = 'Invalid data in TodoListItem entity. "todoListId" must be a number'
       expect(error).toStrictEqual(err)
     }
   })

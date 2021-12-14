@@ -61,20 +61,19 @@ describe('POST /login -> if email and password is correct', () => {
       password: 'KjcndksoiO1pa',
       email: 'David.Nalan@hotmail.com'
     }
-    const user = await request(app)
+    const response = await request(app)
       .post('/auth/login')
       .send(testUser)
-    expect(user.headers['content-type']).toEqual('application/json; charset=utf-8')
-    expect(user.body.status).toBe('SUCCESS')
-    expect(user.body.data.user.email).toEqual(testUser.email)
-    expect(user.body.data).toMatchObject({
-      user: {
-        id: expect.any(Number),
-        isVerified: expect.any(Boolean)
-      },
+    console.log(response.body.data, '>>>>>>>>>>>>>>>>>>>>>>')
+    expect(response.headers['content-type']).toEqual('application/json; charset=utf-8')
+    expect(response.body.status).toBe('SUCCESS')
+    expect(response.body.data.email).toEqual(testUser.email)
+    expect(response.body.data).toMatchObject({
+      id: expect.any(Number),
+      is_verified: expect.any(Boolean),
       token: expect.any(String)
     })
-    expect(user.statusCode).toBe(200)
+    expect(response.statusCode).toBe(200)
   })
 })
 

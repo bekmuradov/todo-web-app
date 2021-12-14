@@ -18,7 +18,8 @@
           </q-item-section>
 
           <q-item-section side>
-            {{ list.todolist_items.length }}
+            <!-- show only remaining tasks -->
+            {{ list.todolist_items.filter(task => task.is_done === 'false').length }}
           </q-item-section>
 
           <q-item-section avatar>

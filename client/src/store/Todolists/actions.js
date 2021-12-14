@@ -25,10 +25,10 @@ export function getTodolistById ({ commit }, payload) {
     })
 }
 
-export function addTodolist ({ commit }, payload) {
+export function addTodolist ({ dispatch, commit }, payload) {
   return dbService.addOne(payload).then(
     (response) => {
-      // dispatch('fetchTodolists')
+      dispatch('fetchTodolists')
       return Promise.resolve(response.data)
     },
     (error) => {

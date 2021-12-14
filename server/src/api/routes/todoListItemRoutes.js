@@ -16,8 +16,10 @@ router.post('/create', (req, res, next) => {
 
 router.post('/create-bulk', (req, res, next) => {
   req = adaptRequest(req)
-  console.log('logged in user', req.user)
-  TodoListItemController.insertBulk({ data: req.body.data }).then((result) => {
+  TodoListItemController.insertBulk({
+    data: req.body,
+    loggedInUser: req.user
+  }).then((result) => {
     sendResponse(res, result)
   })
     .catch((error) => {
@@ -57,11 +59,7 @@ router.delete('/:id', (req, res, next) => {
 
 router.put('/:id', (req, res, next) => {
   req = adaptRequest(req)
-  const data = {
-    id: req.pathParams.id,
-    ...req.body
-  }
-  TodoListItemController.updateOne({ data }).then((result) => {
+  TodoListItemController.updateOne(req.pathParams.id, req.body, req.user).then((result) => {
     sendResponse(res, result)
   })
     .catch((error) => {

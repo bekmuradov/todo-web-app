@@ -1,11 +1,10 @@
 const responseMessage = require('../../utils/responseMessages')
 
-function makeTodoListController ({ todoListService, makeTodoList, patchTodoList, todoListModel }) {
+function makeTodoListController ({ todoListService, makeTodoList, patchTodoList, todoListModel, todoListItemModel }) {
   const insert = async ({ data }) => {
     try {
       const todoList = makeTodoList(data)
       const NewTodoList = {
-        id: todoList.getId(),
         title: todoList.getTitle(),
         added_by: todoList.getUserId()
       }
@@ -26,7 +25,10 @@ function makeTodoListController ({ todoListService, makeTodoList, patchTodoList,
         return responseMessage.inValidParam({ message: 'No user id' })
       }
       const query = { added_by: id }
-      const result = await todoListService.findAllRecords(query)
+      const options = {
+        include: todoListItemModel
+      }
+      const result = await todoListService.findAllRecords(query, options)
       return responseMessage.successResponse({ data: result })
     } catch (error) {
       if (error.name === 'ValidationError') {
@@ -41,7 +43,11 @@ function makeTodoListController ({ todoListService, makeTodoList, patchTodoList,
       if (!id) {
         return responseMessage.badRequest()
       }
-      const result = await todoListService.findByPk(id)
+      // const query = { added_by: id }
+      const options = {
+        include: todoListItemModel
+      }
+      const result = await todoListService.findByPk(id, options)
       if (result) {
         return responseMessage.successResponse({ data: result })
       } else {

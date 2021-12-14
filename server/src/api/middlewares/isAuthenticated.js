@@ -6,11 +6,10 @@ const tokenService = require('../services/dbService')({ model: userToken })
 const jwt = require('jsonwebtoken')
 const { JWT } = require('../config/authConstants')
 
-const verifyCallback = (req, resolve, reject, requiredRights) => async (err, user, info) => {
+const verifyCallback = (req, resolve, reject) => async (err, user, info) => {
   if (err || info || !user) {
     return reject('Unauthorized User')
   }
-  req.user = user
   const token = await tokenService.findOne({ token: (req.headers.authorization).replace('Bearer ', '') })
   if (!token) {
     return reject('Token not Found')
@@ -18,6 +17,8 @@ const verifyCallback = (req, resolve, reject, requiredRights) => async (err, use
   jwt.verify(token.token, JWT.TOKEN_SECRET, (err, user) => {
     if (err === 'jwt expired') {
       return reject('Token is Expired')
+    } else {
+      req.user = user
     }
   })
   resolve()

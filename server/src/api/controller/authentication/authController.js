@@ -37,7 +37,7 @@ function makeAuthController ({ makeUniqueValidation, userService, makeUser, toke
         const query = { [Op.or]: [{ email }] }
         const user = await userService.findOne(query)
         if (!user) {
-          return responseMessage.loginFailed({ message: 'login info incorrect' })
+          return responseMessage.loginFailed({ message: 'login info incorrect or maybe you have to register' })
         }
         const isPasswordMatch = await user.isPasswordMatch(password)
         if (!isPasswordMatch) {
@@ -67,9 +67,28 @@ function makeAuthController ({ makeUniqueValidation, userService, makeUser, toke
     }
   }
 
+  const logout = async (req) => {
+    try {
+      if (req.user) {
+        const userTokens = await tokenService.findOne({
+          token: (req.headers.authorization).replace('Bearer ', ''),
+          user_id: req.user.id
+        })
+        const id = userTokens.id
+        delete userTokens.id
+        await tokenService.deleteByPk(id)
+        return responseMessage.requestValidated({ message: 'Logged out Successfully' })
+      }
+      return responseMessage.badRequest()
+    } catch (error) {
+      return responseMessage.failureResponse()
+    }
+  }
+
   return Object.freeze({
     register,
-    login
+    login,
+    logout
   })
 }
 

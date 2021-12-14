@@ -1,6 +1,6 @@
 const buildMakeTodoList = function (todoListValidator) {
-  return function makeTodoList ({ id, title, addedBy } = {}) {
-    const { error } = todoListValidator({ id, title, addedBy })
+  return function makeTodoList ({ title, addedBy } = {}) {
+    const { error } = todoListValidator({ title, addedBy })
     if (error) {
       const ValidationError = new Error()
       ValidationError.name = 'ValidationError'
@@ -9,7 +9,6 @@ const buildMakeTodoList = function (todoListValidator) {
     }
 
     return Object.freeze({
-      getId: () => id,
       getTitle: () => title,
       getUserId: () => addedBy
     })

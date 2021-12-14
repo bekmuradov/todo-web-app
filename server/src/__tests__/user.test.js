@@ -41,7 +41,7 @@ describe('[CASE 2] Test MakeUser', () => {
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in User entity. password must contain lower case, upper case and atleast one digit'
+      err.message = 'password must contain lower case, upper case and atleast one digit'
       expect(error).toStrictEqual(err)
     }
   })
@@ -58,7 +58,7 @@ describe('[CASE 3] Test MakeUser', () => {
     } catch (error) {
       const err = new Error()
       err.name = 'ValidationError'
-      err.message = 'Invalid data in User entity. accepted email tlds .com, .net, .th, .ac, .edu, .asia'
+      err.message = 'accepted email tlds .com, .net, .th, .ac, .edu, .asia'
       expect(error).toStrictEqual(err)
     }
   })

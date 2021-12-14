@@ -12,15 +12,17 @@ function makeSequelizeDbService ({ model }) {
     throw new Error('send List of objects (key/value pairs) to create instances from')
   }
 
-  const findOne = async (query) => {
-    const result = await model.findOne({
-      where: query
-    })
+  const findOne = async (query, options = {}) => {
+    options = {
+      where: { ...query },
+      ...options
+    }
+    const result = await model.findOne(options)
     return result
   }
 
-  const findByPk = async (query) => {
-    const result = await model.findByPk(query)
+  const findByPk = async (query, options = {}) => {
+    const result = await model.findByPk(query, options)
     return result
   }
 
@@ -54,6 +56,14 @@ function makeSequelizeDbService ({ model }) {
     return result
   }
 
+  const updateMany = async (query, data) => {
+    const result = await model.update(data, {
+      returning: true,
+      where: query
+    })
+    return result
+  }
+
   return Object.freeze({
     createOne,
     createMany,
@@ -61,7 +71,8 @@ function makeSequelizeDbService ({ model }) {
     findByPk,
     findAllRecords,
     deleteByPk,
-    updateByPk
+    updateByPk,
+    updateMany
   })
 }
 
