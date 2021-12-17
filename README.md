@@ -2,7 +2,7 @@
 ## Example of todo web app using Postgresql, Sequelize, Express, Quasar (Vue 3) and Node.js.
 This is an example of a simple CRUD application with layered software and separation of business logic vs technology.
 
-It is a simple web app for creating `todolists` and `todolistitems` and includes authentication, validation, persistence and UI.
+It is a simple web app for creating `todolists` and `todolistitems` and includes authentication, validation, and UI.
 
 ### Features:
 - [x] Users could to create an account
